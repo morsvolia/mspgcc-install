@@ -54,8 +54,9 @@ cd BUILD/binutils
 ../../binutils-2.21.1/configure \
   --target=msp430 \
   --prefix=$INSTALL_PATH \
+  --disable-werror \
 2>&1 | tee co
-make 2>&1 | tee mo
+make -j 2 2>&1 | tee mo
 sudo make install 2>&1 | tee moi
 echo "Done with binutils" 
 errors=`cat co mo moi | grep "Error [0-9]"`
@@ -94,7 +95,7 @@ cd BUILD/gcc
   --enable-languages=c,c++ \
   --prefix=$INSTALL_PATH \
 2>&1 | tee co
-make 2>&1 | tee mo
+make -j 2 2>&1 | tee mo
 sudo make install 2>&1 | tee moi
 echo "Done with gcc" 
 errors=`cat co mo moi | grep "Error [0-9]"`
@@ -116,8 +117,9 @@ cd BUILD/gdb
 ../../gdb-7.2/configure \
   --target=msp430 \
   --prefix=$INSTALL_PATH \
+  --disable-werror \
 2>&1 | tee co
-make 2>&1 | tee mo
+make -j 2 2>&1 | tee mo
 sudo make install 2>&1 | tee moi
 echo "Done with gdb" 
 errors=`cat co mo moi | grep "Error [0-9]"`
@@ -152,7 +154,7 @@ cd msp430-libc-20120224
 patch -p1 < ../msp430-libc-20120224-sf3522752.patch
 ./configure --prefix=$INSTALL_PATH
 cd src/
-make | tee mo
+make -j 2 | tee mo
 # Fix route to msp430-gcc so that sudo recognizes it
 sed -i 's/\(msp430-gcc\)/$(bindir)\/\1/' Makefile
 sed -i 's/\(msp430-ar\)/$(bindir)\/\1/' Makefile
